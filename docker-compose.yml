@@ -1,0 +1,18 @@
+version: '2'
+
+services:
+
+  jenkins:
+    container_name: jenkins
+    hostname: jenkins
+    build: ./docker
+    restart: on-failure
+    privileged: true
+    user: root
+    ports:
+      - 8888:8080
+    expose:
+      - 8080
+      - 50000
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro

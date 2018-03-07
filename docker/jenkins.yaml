@@ -1,0 +1,71 @@
+jenkins:
+  systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code Plugin\n\n"
+  numExecutors: 0
+  scmCheckoutRetryCount: 2
+
+  securityRealm:
+    local:
+      allowsSignup: false
+      users:
+        - id: "admin"
+          password: "admin"
+
+  AuthorizationStrategy:
+    loggedInUsersCanDoAnything:
+      allowAnonymousRead: false
+
+  agentProtocols:
+    - JNLP4-connect
+
+  clouds:
+    - docker:
+        name: "docker"
+        dockerApi:
+          dockerHost:
+            uri: "unix:///var/run/docker.sock"
+        templates:
+          - labelString: "docker-agent"
+            dockerTemplateBase:
+              image: "jenkins/slave"
+            remoteFs: "/home/jenkins/agent"
+            connector:
+              attach:
+                user: "jenkins"
+            instanceCapStr: "10"
+
+  jobs:
+    - >
+        folder('jenkins') {
+            displayName('jenkins')
+            description('Jobs for Jenkins')
+        }
+    - >
+        freeStyleJob('jenkins/seed') {
+            description('This will generate all multibranch pipeline jobs that use Jenkinsfiles')
+            logRotator(-1, 10)
+            scm {
+                github('rveede/jenkins-configuration-as-code-plugin-example')
+            }
+            triggers {
+                scm('H/5 * * * *')
+            }
+            steps {
+                dsl {
+                    external('jenkins/projects.groovy')
+                    removeAction('DISABLE')
+                    ignoreExisting()
+                }
+            }
+        }
+
+credentials:
+  system:
+    ? # "global"
+    : - basicSSHUserPrivateKey:
+          scope: SYSTEM
+          id: jenkins_ssh_key
+          username: ssh_root
+          description: "SSH private key file"
+          privateKeySource:
+            fileOnMaster:
+              keyStoreFile: /usr/share/jenkins/ref/id_rsa
