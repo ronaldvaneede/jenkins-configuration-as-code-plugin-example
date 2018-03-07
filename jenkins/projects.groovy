@@ -1,19 +1,20 @@
-String basePath = 'example'
+String basePath = 'projects'
 String repo = 'https://github.com/rveede/jenkins-configuration-as-code-plugin-example.git'
 
 folder(basePath) {
     description 'This example shows basic folder/job creation.'
 }
 
-multibranchPipelineJob("$basePath/job-using-jenkinsfile") {
+multibranchPipelineJob("$basePath/project1") {
     branchSources {
         git {
             remote(repo)
         }
     }
-    factory {
-        workflowMultiBranchProjectFactory {
-            scriptPath('project1/Jenkinsfile')
+    configure {
+        it / factory(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory') {
+            owner(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject', reference: '../..')
+            scriptPath("project1/Jenkinsfile")
         }
     }
     triggers {
@@ -21,15 +22,16 @@ multibranchPipelineJob("$basePath/job-using-jenkinsfile") {
     }
 }
 
-multibranchPipelineJob("$basePath/job-using-jenkinsfile") {
+multibranchPipelineJob("$basePath/project2") {
     branchSources {
         git {
             remote(repo)
         }
     }
-    factory {
-        workflowMultiBranchProjectFactory {
-            scriptPath('project2/Jenkinsfile')
+    configure {
+        it / factory(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory') {
+            owner(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject', reference: '../..')
+            scriptPath("project2/Jenkinsfile")
         }
     }
     triggers {
