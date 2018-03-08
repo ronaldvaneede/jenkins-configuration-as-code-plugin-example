@@ -1,40 +1,31 @@
-String basePath = 'projects'
-String repo = 'https://github.com/rveede/jenkins-configuration-as-code-plugin-example.git'
+basePath = 'projects'
 
 folder(basePath) {
     description 'This example shows basic folder/job creation.'
 }
 
-multibranchPipelineJob("$basePath/project1") {
-    branchSources {
-        git {
-            remote(repo)
-        }
-    }
-    configure {
-        it / factory(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory') {
-            owner(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject', reference: '../..')
-            scriptPath("project1/Jenkinsfile")
-        }
-    }
-    triggers {
-        periodic(5)
-    }
-}
+projects = [
+        [ name: 'project1', repo: 'https://github.com/rveede/jenkins-configuration-as-code-plugin-example.git'],
+        [ name: 'project2', repo: 'https://github.com/rveede/jenkins-configuration-as-code-plugin-example.git']
+]
 
-multibranchPipelineJob("$basePath/project2") {
-    branchSources {
-        git {
-            remote(repo)
+projects.each { project ->
+    multibranchPipelineJob("${basePath}/${project.name}") {
+        branchSources {
+            git {
+                remote("${project.repo}")
+            }
         }
-    }
-    configure {
-        it / factory(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory') {
-            owner(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject', reference: '../..')
-            scriptPath("project2/Jenkinsfile")
+        configure {
+            // This is a hack because the JobDSL does not yet have a nice way to define the scriptPath afaik
+            // This is needed because the Jenkinksfile is not in the root...this happens when you do not stick to the convention
+            it / factory(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowBranchProjectFactory') {
+                owner(class: 'org.jenkinsci.plugins.workflow.multibranch.WorkflowMultiBranchProject', reference: '../..')
+                scriptPath("${project.name}/Jenkinsfile")
+            }
         }
-    }
-    triggers {
-        periodic(5)
+        triggers {
+            periodic(5)
+        }
     }
 }
