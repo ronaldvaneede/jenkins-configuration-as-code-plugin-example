@@ -37,6 +37,7 @@ display-url-api:latest
 docker-commons:latest
 docker-java-api:latest
 docker-plugin:latest
+docker-swarm:latest
 docker-workflow:latest
 durable-task:latest
 email-ext:latest
@@ -48,6 +49,7 @@ github-api:latest
 github-branch-source:latest
 github:latest
 gradle:latest
+greenballs:latest
 handlebars:latest
 handy-uri-templates-2-api:latest
 htmlpublisher:latest
