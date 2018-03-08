@@ -2,18 +2,15 @@ jenkins:
   systemMessage: "Jenkins configured automatically by Jenkins Configuration as Code Plugin\n\n"
   numExecutors: 0
   scmCheckoutRetryCount: 2
-
   securityRealm:
     local:
       allowsSignup: false
       users:
         - id: "admin"
           password: "admin"
-
   AuthorizationStrategy:
     loggedInUsersCanDoAnything:
       allowAnonymousRead: false
-
   agentProtocols:
     - JNLP4-connect
 
