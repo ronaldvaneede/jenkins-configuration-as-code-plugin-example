@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         gradle '4.6'
-        docker 'latest'
     }
     stages {
         stage('Example Build') {

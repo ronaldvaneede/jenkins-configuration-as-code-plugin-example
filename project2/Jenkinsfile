@@ -2,7 +2,6 @@ pipeline {
     agent any
     tools {
         maven '3.5.3'
-        docker 'latest'
     }
     stages {
         stage('Example Build') {
