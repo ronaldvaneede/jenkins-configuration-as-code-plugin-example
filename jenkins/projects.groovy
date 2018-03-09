@@ -5,8 +5,8 @@ folder(basePath) {
 }
 
 def projects = [
-    [ name: 'project1', repo: 'git@github.com:rveede/example-project-1.git'],
-    [ name: 'project2', repo: 'git@github.com:rveede/example-project-2.git']
+    [ name: 'project1', repo: 'https://github.com/rveede/example-project-1.git'],
+    [ name: 'project2', repo: 'https://github.com/rveede/example-project-2.git']
 ]
 
 projects.each { project ->
