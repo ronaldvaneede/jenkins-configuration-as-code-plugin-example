@@ -4,7 +4,7 @@ folder(basePath) {
     description 'This example shows basic folder/job creation.'
 }
 
-projects = [
+def projects = [
         [ name: 'project1', repo: 'https://github.com/rveede/jenkins-configuration-as-code-plugin-example.git'],
         [ name: 'project2', repo: 'https://github.com/rveede/jenkins-configuration-as-code-plugin-example.git']
 ]
